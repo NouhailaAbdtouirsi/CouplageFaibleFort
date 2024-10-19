@@ -1,14 +1,34 @@
 package com.abdtouirsi.dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public class EtudiantDAODictionary {
+public class EtudiantDAODictionary implements IEtudiantDAO{
     private Map<String, Etudiant> etudiants = new java.util.HashMap<>();
+    @Override
     public Etudiant addEtudiant(Etudiant etudiant) {
         etudiants.put(etudiant.getId(), etudiant);
         return etudiant;
     }
-    public Map<String, Etudiant> getAllEtudiants() {
-        return etudiants;
+    @Override
+    public List<Etudiant> getAllEtudiants() {
+        return new ArrayList<>(etudiants.values());
     }
+    @Override
+    public Etudiant updateEtudiant(String id, Etudiant updatedEtudiant) {
+        // Ensure the ID remains the same by fetching the current record with the given id
+        Etudiant existingEtudiant = etudiants.get(id);
+        if (existingEtudiant != null) {
+            // Update other fields but keep the same ID
+            existingEtudiant.setNom(updatedEtudiant.getNom());
+            existingEtudiant.setPrenom(updatedEtudiant.getPrenom());
+            existingEtudiant.setEmail(updatedEtudiant.getEmail());
+            // No need to change the id
+            return existingEtudiant;
+        }
+        return null;
+    }
+
+
 }
